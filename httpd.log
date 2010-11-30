@@ -320,3 +320,20 @@
 2010/11/30 10:52:56 GET /dml/default.css
 2010/11/30 10:52:56 GET /dml/Story2.dml
 2010/11/30 10:52:56 GET /dml/default.css
+2010/11/30 11:10:43 web.go serving 0.0.0.0:8080
+2010/11/30 11:10:46 GET /dml/Story2.dml
+2010/11/30 11:11:26 web.go serving 0.0.0.0:8080
+2010/11/30 11:11:29 GET /dml/Story2.dml
+2010/11/30 11:11:29 GET /dml/default.css
+2010/11/30 11:11:57 GET /dml/home/gary/Projects/DML/Server/Current/Story2.dml
+2010/11/30 11:12:05 GET /dml-g/home/gary/Projects/DML/Server/Current/Story2.dml
+2010/11/30 11:12:15 web.go serving 0.0.0.0:8080
+2010/11/30 11:12:18 GET /dml-g/home/gary/Projects/DML/Server/Current/Story2.dml
+2010/11/30 11:12:18 GET /dml-g/home/gary/Projects/DML/Server/Current/default.css
+2010/11/30 11:12:30 GET /dml/home/gary/Projects/DML/Server/Current/Story2.dml
+2010/11/30 11:16:31 web.go serving 0.0.0.0:8080
+2010/11/30 11:16:34 GET /dml/Story2.dml
+2010/11/30 11:16:34 GET /dml/default.css
+2010/11/30 11:16:35 GET /dml/Story2.dml
+2010/11/30 11:16:35 GET /dml/default.css
+2010/11/30 11:16:46 GET /dml/default.css
