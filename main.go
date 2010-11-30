@@ -7,19 +7,8 @@ import (
 	"strings"
 )
 
-/*
- * Swaps the DML tags in the given input for appropriate HTML tags in the return value.
- * Takes:
- *      doc - the text of the document to convert
- * Returns:
- *      the given text with all special characters escaped and the DML tags swapped for the appropriate HTML tags
- */
-func parseDoc(doc string) string {
-        return ""
-}
-
 func globalServe(val string) string {
-	val = strings.Replace(val, "g-dml", "", 1)
+	val = strings.Replace(val, "dml/g", "", 1)
 	if len(val) == 0 || (len(val) == 1 && val == "/") {
                 val += "index.htm"
         }
@@ -51,19 +40,13 @@ func contextServe(val string) string {
 }
 
 func main() {
-        flag.Bool("global", false, "global")
+        global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
 	flag.Parse()
-        global := false
-        for i := 0; i < flag.NArg(); i++ {
-                if flag.Arg(i) == "-global" {
-                        global = true
-                }
-        }
         web.Get("/dml/(.*)", contextServe)
         web.Get("/dml", contextServe)
-        if global {
-		web.Get("/g-dml/(.*)", globalServe)
-        	web.Get("/g-dml", contextServe)
+        if *global {
+		web.Get("/dml/g/(.*)", globalServe)
+        	web.Get("/dml/g", globalServe)
 	}
         web.Run("0.0.0.0:8080")
 }

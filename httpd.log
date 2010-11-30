@@ -18,3 +18,24 @@
 2010/11/29 11:18:05 GET /dml/home/gary/Workspace/DML-Server/index.html
 2010/11/29 11:18:05 GET /dml/home/gary/Workspace/DML-Server/index.html
 2010/11/29 11:18:05 GET /dml/home/gary/Workspace/DML-Server/index.html
+2010/11/29 21:39:00 web.go serving 0.0.0.0:8080
+2010/11/29 21:39:06 GET /dml/
+2010/11/29 21:39:07 GET /dml/
+2010/11/29 21:39:26 GET /dml/g/home/gary/Projects/DML/Server/Current/
+2010/11/29 21:39:28 GET /dml/g/home/gary/Projects/DML/Server/Current/
+2010/11/29 21:39:28 GET /dml/g/home/gary/Projects/DML/Server/Current/
+2010/11/29 21:39:29 GET /dml/g/home/gary/Projects/DML/Server/Current/
+2010/11/29 21:39:56 web.go serving 0.0.0.0:8080
+2010/11/29 21:39:57 GET /dml/g/home/gary/Projects/DML/Server/Current/
+2010/11/29 21:42:18 web.go serving 0.0.0.0:8080
+2010/11/29 21:42:22 GET /dml/g/home/gary/Projects/DML/Server/Current
+2010/11/29 21:42:37 GET /dml
+2010/11/29 21:42:37 Incorrect number of arguments for /dml
+2010/11/29 21:42:47 GET /dml/
+2010/11/29 21:43:53 web.go serving 0.0.0.0:8080
+2010/11/29 21:43:55 GET /dml/g/home/gary/Projects/DML/Server/Current
+2010/11/29 21:43:56 GET /dml/g/home/gary/Projects/DML/Server/Current
+2010/11/29 21:43:58 GET /dml/g/home/gary/Projects/DML/Server/Current/
+2010/11/29 21:44:03 GET /dml/
+2010/11/29 21:44:05 GET /dml
+2010/11/29 21:44:05 Incorrect number of arguments for /dml
