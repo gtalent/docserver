@@ -340,3 +340,17 @@
 2010/11/30 11:49:19 web.go serving 0.0.0.0:8080
 2010/11/30 12:19:22 GET /dml/Story2.dml
 2010/11/30 12:19:22 GET /favicon.ico
+2010/11/30 13:03:50 web.go serving 0.0.0.0:8080
+2010/11/30 13:04:07 GET /dml/Story2.dml
+2010/11/30 13:04:07 GET /dml/default.css
+2010/11/30 13:04:07 GET /favicon.ico
+2010/11/30 14:26:04 web.go serving 0.0.0.0:15448
+2010/11/30 14:26:08 GET /dml/Story2.dml
+2010/11/30 14:26:08 GET /dml/default.css
+2010/11/30 14:26:08 GET /favicon.ico
+2010/11/30 14:26:09 GET /dml/Story2.dml
+2010/11/30 14:26:09 GET /dml/default.css
+2010/11/30 14:26:09 GET /favicon.ico
+2010/11/30 14:26:09 GET /dml/Story2.dml
+2010/11/30 14:26:09 GET /dml/default.css
+2010/11/30 14:26:09 GET /favicon.ico
