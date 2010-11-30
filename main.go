@@ -10,9 +10,9 @@ import (
 func globalServe(val string) string {
         file, err := ioutil.ReadFile("/" + val)
         if err != nil {
-		return "404: Global file not found: dml-g/" + val
+		return "404: File not found: dml-g/" + val
         }
-        return dml.ParseDoc(string(file))
+        return dml.ToHTML(val, string(file))
 }
 
 func contextServe(val string) string {
@@ -23,7 +23,7 @@ func contextServe(val string) string {
         if err != nil {
 		return "404: File not found: dml/" + val
         }
-        return dml.ParseDoc(string(file))
+        return dml.ToHTML(val, string(file))
 }
 
 func main() {
