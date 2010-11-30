@@ -8,6 +8,8 @@ import (
 	"dml"
 )
 
+var contextDir = "";
+
 func globalServe(val string) string {
         file, err := ioutil.ReadFile("/" + val)
         if err != nil {
@@ -23,7 +25,7 @@ func contextServe(val string) string {
 	if len(val) == 0 || (len(val) == 1 && val == "/") {
                 val = "index.dml"
         }
-        file, err := ioutil.ReadFile(val)
+        file, err := ioutil.ReadFile(contextDir + val)
         if err != nil {
 		return "404: File not found: dml/" + val
         }
@@ -36,6 +38,12 @@ func contextServe(val string) string {
 func main() {
         global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
 	flag.Parse()
+	if flag.NArg() != 0 {
+		contextDir = flag.Arg(0)
+		if !strings.HasSuffix(contextDir, "/") {
+			contextDir += "/"
+		}
+	}
 	web.Get("/dml/(.*)", contextServe)
         web.Get("/dml", contextServe)
         if *global {
