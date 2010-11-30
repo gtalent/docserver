@@ -1,0 +1,20 @@
+2010/11/29 10:31:58 web.go serving 0.0.0.0:8080
+2010/11/29 10:32:02 GET /
+2010/11/29 10:32:02 GET /
+2010/11/29 10:32:02 GET /
+2010/11/29 10:32:36 web.go serving 0.0.0.0:8080
+2010/11/29 10:32:37 GET /
+2010/11/29 10:32:38 GET /
+2010/11/29 10:32:38 GET /
+2010/11/29 10:32:38 GET /
+2010/11/29 10:40:08 web.go serving 0.0.0.0:8080
+2010/11/29 10:40:28 GET /index.html
+2010/11/29 11:04:57 web.go serving 0.0.0.0:8080
+2010/11/29 11:05:02 GET /index.html
+2010/11/29 11:05:09 GET /dml/index.html
+2010/11/29 11:07:04 GET /dml/home/gary/Workspace/DML-Server/index.html
+2010/11/29 11:17:59 web.go serving 0.0.0.0:8080
+2010/11/29 11:18:04 GET /dml/home/gary/Workspace/DML-Server/index.html
+2010/11/29 11:18:05 GET /dml/home/gary/Workspace/DML-Server/index.html
+2010/11/29 11:18:05 GET /dml/home/gary/Workspace/DML-Server/index.html
+2010/11/29 11:18:05 GET /dml/home/gary/Workspace/DML-Server/index.html
