@@ -37,7 +37,6 @@ func contextServe(val string) string {
 
 func main() {
 	global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
-	flag.Parse()
 	port := "15448"
 	settingsFile, err := ioutil.ReadFile("dmld.conf")
 	if err == nil {
@@ -47,15 +46,21 @@ func main() {
 				port = strings.Trim(strings.Replace(settings[i], "Port:", "", 1), "\t ")
 			} else if strings.HasPrefix(settings[i], "Context:") {
 				contextDir = strings.Trim(strings.Replace(settings[i], "Context:", "", 1), "\t ")
+			} else if strings.HasPrefix(settings[i], "Global:") {
+				g := strings.Trim(strings.Replace(settings[i], "Global:", "", 1), "\t ")
+				if strings.ToLower(g) == "true" {
+					*global = true
+				}
 			}
 		}
 	}
+	flag.Parse()
 	//read the context from the input and override whats in the settings file if something was there
 	if flag.NArg() != 0 {
 		contextDir = flag.Arg(0)
 	}
 	//make sure the context is a directory
-	if !strings.HasSuffix(contextDir, "/") {
+	if len(contextDir) != 0 && !strings.HasSuffix(contextDir, "/") {
 		contextDir += "/"
 	}
 	web.Get("/dml/(.*)", contextServe)
