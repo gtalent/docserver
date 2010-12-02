@@ -10,18 +10,34 @@ import (
 
 var contextDir = ""
 
-func globalServe(val string) string {
+func globalServe(params *web.Context, val string) string {
+	cssPath := params.Params["style"]
+	if len(cssPath) == 0 {
+		cssPath = "default.css"
+	} else {
+		cssPath += ".css"
+	}
 	file, err := ioutil.ReadFile("/" + val)
 	if err != nil {
 		return "404: File not found: dml-g/" + val
 	}
 	if strings.HasSuffix(val, ".dml") {
+		css, err := ioutil.ReadFile(contextDir + cssPath)
+		if err == nil {
+			return dml.ToHTMLCSS(val, string(file), string(css))
+		}
 		return dml.ToHTML(val, string(file))
 	}
 	return string(file)
 }
 
-func contextServe(val string) string {
+func contextServe(params *web.Context, val string) string {
+	cssPath := params.Params["style"]
+	if len(cssPath) == 0 {
+		cssPath = "default.css"
+	} else {
+		cssPath += ".css"
+	}
 	if len(val) == 0 || (len(val) == 1 && val == "/") {
 		val = "index.dml"
 	}
@@ -30,6 +46,10 @@ func contextServe(val string) string {
 		return "404: File not found: dml/" + val
 	}
 	if strings.HasSuffix(val, ".dml") {
+		css, err := ioutil.ReadFile(contextDir + cssPath)
+		if err == nil {
+			return dml.ToHTMLCSS(val, string(file), string(css))
+		}
 		return dml.ToHTML(val, string(file))
 	}
 	return string(file)
@@ -63,6 +83,7 @@ func main() {
 	if len(contextDir) != 0 && !strings.HasSuffix(contextDir, "/") {
 		contextDir += "/"
 	}
+	dml.SetDefaultCSSPath(contextDir + "default.css")
 	web.Get("/dml/(.*)", contextServe)
 	web.Get("/dml", contextServe)
 	if *global {

@@ -411,3 +411,40 @@
 2010/11/30 20:02:00 GET /dml/default.css
 2010/11/30 20:02:00 GET /favicon.ico
 2010/11/30 20:02:24 web.go serving 0.0.0.0:15448
+2010/12/01 11:00:34 web.go serving 0.0.0.0:15448
+2010/12/01 11:01:27 GET /dml/DML.dml
+2010/12/01 11:01:27 GET /dml/default.css
+2010/12/01 11:01:28 GET /dml/DML.dml
+2010/12/01 11:01:28 GET /dml/default.css
+2010/12/01 11:01:28 GET /dml/DML.dml
+2010/12/01 11:01:28 GET /dml/default.css
+2010/12/01 11:01:59 web.go serving 0.0.0.0:15448
+2010/12/01 11:02:00 GET /dml/DML.dml
+2010/12/01 11:02:00 GET /dml/default.css
+2010/12/01 11:02:13 web.go serving 0.0.0.0:15448
+2010/12/01 11:02:16 GET /dml/DML.dml
+2010/12/01 11:02:16 GET /dml/default.css
+2010/12/01 11:03:52 web.go serving 0.0.0.0:15448
+2010/12/01 11:03:53 GET /dml/DML.dml
+2010/12/01 11:03:53 GET /dml/default.css
+2010/12/01 11:07:24 web.go serving 0.0.0.0:15448
+2010/12/01 11:07:28 GET /dml/DML.dml
+2010/12/01 11:07:28 GET /dml/default.css
+2010/12/01 11:09:37 GET /dml/Story2.dml
+2010/12/01 11:09:37 GET /dml/default.css
+2010/12/01 11:12:41 web.go serving 0.0.0.0:15448
+2010/12/01 11:12:53 web.go serving 0.0.0.0:15448
+2010/12/01 11:12:55 GET /dml/Story2.dml
+2010/12/01 11:12:55 GET /dml/default.css
+2010/12/01 11:12:56 GET /dml/Story2.dml
+2010/12/01 11:12:56 GET /dml/default.css
+2010/12/01 11:13:07 GET /dml/Story2.dml
+2010/12/01 11:13:07 GET /dml/default.css
+2010/12/01 11:13:07 GET /dml/Story2.dml
+2010/12/01 11:13:07 GET /dml/default.css
+2010/12/01 11:14:53 web.go serving 0.0.0.0:15448
+2010/12/01 11:14:53 GET /dml/Story2.dml
+2010/12/01 11:14:53 GET /dml/default.css
+2010/12/01 11:15:51 web.go serving 0.0.0.0:15448
+2010/12/01 11:15:52 GET /dml/Story2.dml
+2010/12/01 11:15:52 GET /dml/default.css
