@@ -57,6 +57,7 @@ func contextServe(params *web.Context, val string) string {
 
 func main() {
 	global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
+	remote := flag.Bool("remote", false, "Allow the remote clients to access the server.")
 	port := "15448"
 	settingsFile, err := ioutil.ReadFile("dmld.conf")
 	if err == nil {
@@ -70,6 +71,11 @@ func main() {
 				g := strings.Trim(strings.Replace(settings[i], "Global:", "", 1), "\t ")
 				if strings.ToLower(g) == "true" {
 					*global = true
+				}
+			} else if strings.HasPrefix(settings[i], "AllowRemote:") {
+				g := strings.Trim(strings.Replace(settings[i], "AllowRemote:", "", 1), "\t ")
+				if strings.ToLower(g) == "true" {
+					*remote = true
 				}
 			}
 		}
@@ -90,5 +96,9 @@ func main() {
 		web.Get("/dml-g/(.*)", globalServe)
 		web.Get("/dml-g", globalServe)
 	}
-	web.Run("0.0.0.0:" + port)
+	if *remote {
+		web.Run("0.0.0.0:" + port)
+	} else {
+		web.Run("127.0.0.1:" + port)
+	}
 }

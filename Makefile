@@ -6,5 +6,7 @@ GOFILES=\
 
 include $(GOROOT)/src/Make.pkg
 
-link:
-	6l -o main _go_.6
+link: package
+	$(O)l -o main _go_.$(O)
+run: link
+	./main
