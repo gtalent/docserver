@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"flag"
 	"strings"
-	"web"
+	web "github.com/hoisie/web.go"
 	"dml"
 )
 
@@ -61,7 +61,7 @@ func main() {
 	port := "15448"
 	settingsFile, err := ioutil.ReadFile("dmld.conf")
 	if err == nil {
-		settings := strings.Split(string(settingsFile), "\n", -1)
+		settings := strings.Split(string(settingsFile), "\n")
 		for i := 0; i < len(settings); i++ {
 			if strings.HasPrefix(settings[i], "Port:") {
 				port = strings.Trim(strings.Replace(settings[i], "Port:", "", 1), "\t ")
