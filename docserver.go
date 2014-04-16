@@ -1,11 +1,11 @@
 package main
 
 import (
-	"io/ioutil"
 	"flag"
+	"github.com/hoisie/web"
+	"github.com/russross/blackfriday"
+	"io/ioutil"
 	"strings"
-	web "github.com/hoisie/web.go"
-	"dml"
 )
 
 var contextDir = ""
@@ -19,14 +19,10 @@ func globalServe(params *web.Context, val string) string {
 	}
 	file, err := ioutil.ReadFile("/" + val)
 	if err != nil {
-		return "404: File not found: dml-g/" + val
+		return "404: File not found: doc-g/" + val
 	}
-	if strings.HasSuffix(val, ".dml") {
-		css, err := ioutil.ReadFile(contextDir + cssPath)
-		if err == nil {
-			return dml.ToHTMLCSS(val, string(file), string(css))
-		}
-		return dml.ToHTML(val, string(file))
+	if strings.HasSuffix(val, ".md") {
+		return string(blackfriday.MarkdownBasic(file))
 	}
 	return string(file)
 }
@@ -39,18 +35,14 @@ func contextServe(params *web.Context, val string) string {
 		cssPath += ".css"
 	}
 	if len(val) == 0 || (len(val) == 1 && val == "/") {
-		val = "index.dml"
+		val = "index.md"
 	}
 	file, err := ioutil.ReadFile(contextDir + val)
 	if err != nil {
-		return "404: File not found: dml/" + val
+		return "404: File not found: doc/" + val
 	}
-	if strings.HasSuffix(val, ".dml") {
-		css, err := ioutil.ReadFile(contextDir + cssPath)
-		if err == nil {
-			return dml.ToHTMLCSS(val, string(file), string(css))
-		}
-		return dml.ToHTML(val, string(file))
+	if strings.HasSuffix(val, ".md") {
+		return string(blackfriday.MarkdownBasic(file))
 	}
 	return string(file)
 }
@@ -59,7 +51,7 @@ func main() {
 	global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
 	remote := flag.Bool("remote", false, "Allow the remote clients to access the server.")
 	port := "15448"
-	settingsFile, err := ioutil.ReadFile("dmld.conf")
+	settingsFile, err := ioutil.ReadFile("docserver.conf")
 	if err == nil {
 		settings := strings.Split(string(settingsFile), "\n")
 		for i := 0; i < len(settings); i++ {
@@ -89,12 +81,11 @@ func main() {
 	if len(contextDir) != 0 && !strings.HasSuffix(contextDir, "/") {
 		contextDir += "/"
 	}
-	dml.SetDefaultCSSPath(contextDir + "default.css")
-	web.Get("/dml/(.*)", contextServe)
-	web.Get("/dml", contextServe)
+	web.Get("/doc/(.*)", contextServe)
+	web.Get("/doc", contextServe)
 	if *global {
-		web.Get("/dml-g/(.*)", globalServe)
-		web.Get("/dml-g", globalServe)
+		web.Get("/doc-g/(.*)", globalServe)
+		web.Get("/doc-g", globalServe)
 	}
 	if *remote {
 		web.Run("0.0.0.0:" + port)
