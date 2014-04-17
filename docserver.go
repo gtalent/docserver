@@ -23,7 +23,7 @@ import (
 	"strings"
 )
 
-func mkServer(contextDir string) func(*web.Context, string) string {
+func mkServer(contextDir string, format bool) func(*web.Context, string) string {
 	return func(params *web.Context, val string) string {
 		if len(val) == 0 || (len(val) == 1 && val == "/") {
 			val = "index.md"
@@ -33,12 +33,18 @@ func mkServer(contextDir string) func(*web.Context, string) string {
 			return "404: File not found: " + val
 		}
 		if strings.HasSuffix(val, ".md") {
+			var text string
+			if format {
+				text = string(blackfriday.MarkdownBasic(file))
+			} else {
+				text = string(file)
+			}
 			return `<html>
 	<head>
 		<title>` + val + `</title>
 	</head>
 	<body>
-` + string(blackfriday.MarkdownBasic(file)) + `
+` + text + `
 	</body>
 </html>`
 		}
@@ -61,10 +67,13 @@ func main() {
 		contextDir += "/"
 	}
 
-	contextServe := mkServer(contextDir)
-	globalServe := mkServer("")
+	contextServe := mkServer(contextDir, true)
+	mdServe := mkServer(contextDir, false)
+	globalServe := mkServer("", true)
 	web.Get("/doc/(.*)", contextServe)
 	web.Get("/doc", contextServe)
+	web.Get("/md/(.*)", mdServe)
+	web.Get("/md", mdServe)
 	if *global {
 		web.Get("/doc-g/(.*)", globalServe)
 		web.Get("/doc-g", globalServe)
