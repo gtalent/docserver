@@ -23,70 +23,34 @@ import (
 	"strings"
 )
 
-var contextDir = ""
-
-func globalServe(params *web.Context, val string) string {
-	cssPath := params.Params["style"]
-	if len(cssPath) == 0 {
-		cssPath = "default.css"
-	} else {
-		cssPath += ".css"
+func mkServer(contextDir string) func(*web.Context, string) string {
+	return func(params *web.Context, val string) string {
+		if len(val) == 0 || (len(val) == 1 && val == "/") {
+			val = "index.md"
+		}
+		file, err := ioutil.ReadFile(contextDir + val)
+		if err != nil {
+			return "404: File not found: " + val
+		}
+		if strings.HasSuffix(val, ".md") {
+			return `<html>
+	<head>
+		<title>` + val + `</title>
+	</head>
+	<body>
+` + string(blackfriday.MarkdownBasic(file)) + `
+	</body>
+</html>`
+		}
+		return string(file)
 	}
-	file, err := ioutil.ReadFile("/" + val)
-	if err != nil {
-		return "404: File not found: doc-g/" + val
-	}
-	if strings.HasSuffix(val, ".md") {
-		return string(blackfriday.MarkdownBasic(file))
-	}
-	return string(file)
-}
-
-func contextServe(params *web.Context, val string) string {
-	cssPath := params.Params["style"]
-	if len(cssPath) == 0 {
-		cssPath = "default.css"
-	} else {
-		cssPath += ".css"
-	}
-	if len(val) == 0 || (len(val) == 1 && val == "/") {
-		val = "index.md"
-	}
-	file, err := ioutil.ReadFile(contextDir + val)
-	if err != nil {
-		return "404: File not found: doc/" + val
-	}
-	if strings.HasSuffix(val, ".md") {
-		return string(blackfriday.MarkdownBasic(file))
-	}
-	return string(file)
 }
 
 func main() {
+	var contextDir = ""
 	global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
 	remote := flag.Bool("remote", false, "Allow the remote clients to access the server.")
 	port := "15448"
-	settingsFile, err := ioutil.ReadFile("docserver.conf")
-	if err == nil {
-		settings := strings.Split(string(settingsFile), "\n")
-		for i := 0; i < len(settings); i++ {
-			if strings.HasPrefix(settings[i], "Port:") {
-				port = strings.Trim(strings.Replace(settings[i], "Port:", "", 1), "\t ")
-			} else if strings.HasPrefix(settings[i], "Context:") {
-				contextDir = strings.Trim(strings.Replace(settings[i], "Context:", "", 1), "\t ")
-			} else if strings.HasPrefix(settings[i], "Global:") {
-				g := strings.Trim(strings.Replace(settings[i], "Global:", "", 1), "\t ")
-				if strings.ToLower(g) == "true" {
-					*global = true
-				}
-			} else if strings.HasPrefix(settings[i], "AllowRemote:") {
-				g := strings.Trim(strings.Replace(settings[i], "AllowRemote:", "", 1), "\t ")
-				if strings.ToLower(g) == "true" {
-					*remote = true
-				}
-			}
-		}
-	}
 	flag.Parse()
 	//read the context from the input and override whats in the settings file if something was there
 	if flag.NArg() != 0 {
@@ -96,6 +60,9 @@ func main() {
 	if len(contextDir) != 0 && !strings.HasSuffix(contextDir, "/") {
 		contextDir += "/"
 	}
+
+	contextServe := mkServer(contextDir)
+	globalServe := mkServer("")
 	web.Get("/doc/(.*)", contextServe)
 	web.Get("/doc", contextServe)
 	if *global {
