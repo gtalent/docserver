@@ -68,12 +68,12 @@ func main() {
 	}
 
 	contextServe := mkServer(contextDir, true)
-	mdServe := mkServer(contextDir, false)
+	rawServe := mkServer(contextDir, false)
 	globalServe := mkServer("", true)
 	web.Get("/doc/(.*)", contextServe)
 	web.Get("/doc", contextServe)
-	web.Get("/md/(.*)", mdServe)
-	web.Get("/md", mdServe)
+	web.Get("/raw/(.*)", rawServe)
+	web.Get("/raw", rawServe)
 	if *global {
 		web.Get("/doc-g/(.*)", globalServe)
 		web.Get("/doc-g", globalServe)
