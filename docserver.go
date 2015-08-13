@@ -36,7 +36,9 @@ func dirList(dir string) string {
 	if err == nil {
 		for _, v := range list {
 			name := v.Name()
-			if v.IsDir() || strings.HasSuffix(name, ".md") {
+			if v.IsDir() {
+				out += "<li><a href=\"" + dir + "/" + name + "\">" + name + "/</a></li>"
+			} else if strings.HasSuffix(name, ".md") {
 				out += "<li><a href=\"" + dir + "/" + name + "\">" + name + "</a></li>"
 			}
 		}
