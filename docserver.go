@@ -20,8 +20,26 @@ import (
 	"github.com/hoisie/web"
 	"github.com/russross/blackfriday"
 	"io/ioutil"
+	"log"
 	"strings"
 )
+
+func docLinks() string {
+	out := "<ul>"
+	list, err := ioutil.ReadDir(".")
+	if err == nil {
+		for _, v := range list {
+			name := v.Name()
+			if name[len(name)-3:] == ".md" {
+				out += "<li><a href=\"" + name + "\">" + name + "</a></li>"
+			}
+		}
+	} else {
+		log.Println("error:", err)
+	}
+	out += "</ul>"
+	return out
+}
 
 func mkServer(contextDir string, format bool) func(*web.Context, string) string {
 	return func(params *web.Context, val string) string {
@@ -30,7 +48,20 @@ func mkServer(contextDir string, format bool) func(*web.Context, string) string 
 		}
 		file, err := ioutil.ReadFile(contextDir + val)
 		if err != nil {
-			return "404: File not found: " + val
+			if val != "index.md" {
+				return "404: File not found: " + val
+			} else {
+				return `<html>
+	<head>
+		<title>Directory Listing</title>
+	</head>
+	<body>
+	<h3>Docs</h3>
+` + docLinks() + `
+	</body>
+</html>`
+
+			}
 		}
 		if strings.HasSuffix(val, ".md") {
 			var text string
