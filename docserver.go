@@ -36,7 +36,7 @@ func dirList(dir string) string {
 	if err == nil {
 		for _, v := range list {
 			name := v.Name()
-			if v.IsDir() || name[len(name)-3:] == ".md" {
+			if v.IsDir() || strings.HasSuffix(name, ".md") {
 				out += "<li><a href=\"" + dir + "/" + name + "\">" + name + "</a></li>"
 			}
 		}
@@ -56,11 +56,11 @@ func mkServer(contextDir string, format bool) func(*web.Context, string) string 
 			val = "."
 		}
 		fullPath := contextDir + val
-		if fi, err := os.Stat(fullPath); err == nil && fi.IsDir() {
-			return dirList(fullPath)
-		} else if err != nil {
+		if fi, err := os.Stat(fullPath); err != nil {
 			log.Println("error:", err)
 			return "404: File not found: " + val
+		} else if fi.IsDir() {
+			return dirList(fullPath)
 		} else {
 			file, err := ioutil.ReadFile(fullPath)
 			if err != nil {
