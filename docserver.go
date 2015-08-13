@@ -21,11 +21,17 @@ import (
 	"github.com/russross/blackfriday"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 )
 
-func docLinks() string {
-	out := "<ul>"
+func dirList() string {
+	out := `<html>
+	<head>
+		<title>Directory Listing</title>
+	</head>
+	<body>
+	<h3>Docs</h3><ul>`
 	list, err := ioutil.ReadDir(".")
 	if err == nil {
 		for _, v := range list {
@@ -36,41 +42,37 @@ func docLinks() string {
 		}
 	} else {
 		log.Println("error:", err)
+		return "404: Not Found"
 	}
-	out += "</ul>"
+	out += `</ul>
+	</body>
+</html>`
 	return out
 }
 
 func mkServer(contextDir string, format bool) func(*web.Context, string) string {
 	return func(params *web.Context, val string) string {
 		if len(val) == 0 || (len(val) == 1 && val == "/") {
-			val = "index.md"
+			val = "."
 		}
-		file, err := ioutil.ReadFile(contextDir + val)
-		if err != nil {
-			if val != "index.md" {
+		if fi, err := os.Stat(contextDir + val); fi.IsDir() {
+			return dirList()
+		} else if err != nil {
+			log.Println("error:", err)
+			return "404: File not found: " + val
+		} else {
+			file, err := ioutil.ReadFile(contextDir + val)
+			if err != nil {
+				log.Println("error:", err)
 				return "404: File not found: " + val
-			} else {
+			} else if strings.HasSuffix(val, ".md") {
+				var text string
+				if format {
+					text = string(blackfriday.MarkdownBasic(file))
+				} else {
+					text = string(file)
+				}
 				return `<html>
-	<head>
-		<title>Directory Listing</title>
-	</head>
-	<body>
-	<h3>Docs</h3>
-` + docLinks() + `
-	</body>
-</html>`
-
-			}
-		}
-		if strings.HasSuffix(val, ".md") {
-			var text string
-			if format {
-				text = string(blackfriday.MarkdownBasic(file))
-			} else {
-				text = string(file)
-			}
-			return `<html>
 	<head>
 		<title>` + val + `</title>
 	</head>
@@ -78,8 +80,9 @@ func mkServer(contextDir string, format bool) func(*web.Context, string) string 
 ` + text + `
 	</body>
 </html>`
+			}
+			return string(file)
 		}
-		return string(file)
 	}
 }
 
