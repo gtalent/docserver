@@ -25,19 +25,19 @@ import (
 	"strings"
 )
 
-func dirList() string {
+func dirList(dir string) string {
 	out := `<html>
 	<head>
-		<title>Directory Listing</title>
+		<title>` + dir + `</title>
 	</head>
 	<body>
-	<h3>Docs</h3><ul>`
-	list, err := ioutil.ReadDir(".")
+	<h3>` + dir + `</h3><ul>`
+	list, err := ioutil.ReadDir(dir)
 	if err == nil {
 		for _, v := range list {
 			name := v.Name()
-			if name[len(name)-3:] == ".md" {
-				out += "<li><a href=\"" + name + "\">" + name + "</a></li>"
+			if v.IsDir() || name[len(name)-3:] == ".md" {
+				out += "<li><a href=\"" + dir + "/" + name + "\">" + name + "</a></li>"
 			}
 		}
 	} else {
@@ -55,13 +55,14 @@ func mkServer(contextDir string, format bool) func(*web.Context, string) string 
 		if len(val) == 0 || (len(val) == 1 && val == "/") {
 			val = "."
 		}
-		if fi, err := os.Stat(contextDir + val); fi.IsDir() {
-			return dirList()
+		fullPath := contextDir + val
+		if fi, err := os.Stat(fullPath); err == nil && fi.IsDir() {
+			return dirList(fullPath)
 		} else if err != nil {
 			log.Println("error:", err)
 			return "404: File not found: " + val
 		} else {
-			file, err := ioutil.ReadFile(contextDir + val)
+			file, err := ioutil.ReadFile(fullPath)
 			if err != nil {
 				log.Println("error:", err)
 				return "404: File not found: " + val
