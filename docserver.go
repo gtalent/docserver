@@ -59,9 +59,11 @@ func mkServer(contextDir string, format bool) func(*web.Context, string) string 
 		}
 		fullPath := contextDir + val
 		if fi, err := os.Stat(fullPath); err != nil {
+			// path does not exist
 			log.Println("error:", err)
 			return "404: File not found: " + val
 		} else if fi.IsDir() {
+			// return directory listing
 			return dirList(fullPath)
 		} else {
 			file, err := ioutil.ReadFile(fullPath)
@@ -104,13 +106,22 @@ func main() {
 		contextDir += "/"
 	}
 
+	// setup request handlers
 	contextServe := mkServer(contextDir, true)
 	rawServe := mkServer(contextDir, false)
 	globalServe := mkServer("", true)
+	docRedirect := func(ctx *web.Context) {
+		ctx.Redirect(302, "/doc/")
+	}
+	web.Get("", docRedirect)
+	web.Get("/", docRedirect)
+	web.Get("/doc", docRedirect)
 	web.Get("/doc/(.*)", contextServe)
-	web.Get("/doc", contextServe)
 	web.Get("/raw/(.*)", rawServe)
-	web.Get("/raw", rawServe)
+	web.Get("/raw", func(ctx *web.Context) {
+		ctx.Redirect(302, "/doc/")
+	})
+
 	if *global {
 		web.Get("/doc-g/(.*)", globalServe)
 		web.Get("/doc-g", globalServe)
