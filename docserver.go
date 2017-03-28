@@ -100,7 +100,7 @@ func mkRedirect(path string) func(ctx *web.Context) {
 func main() {
 	var contextDir = ""
 	global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
-	remote := flag.Bool("remote", false, "Allow the remote clients to access the server.")
+	local := flag.Bool("local", false, "Allow access from only the local system.")
 	port := "15448"
 	flag.Parse()
 	//read the context from the input and override whats in the settings file if something was there
@@ -130,9 +130,9 @@ func main() {
 	}
 
 	// start server
-	if *remote {
-		web.Run("0.0.0.0:" + port)
-	} else {
+	if *local {
 		web.Run("127.0.0.1:" + port)
+	} else {
+		web.Run("0.0.0.0:" + port)
 	}
 }
