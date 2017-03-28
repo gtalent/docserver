@@ -91,6 +91,12 @@ func mkServer(contextDir string, format bool) func(*web.Context, string) string 
 	}
 }
 
+func mkRedirect(path string) func(ctx *web.Context) {
+	return func(ctx *web.Context) {
+		ctx.Redirect(302, path)
+	}
+}
+
 func main() {
 	var contextDir = ""
 	global := flag.Bool("global", false, "Allow the server to access any files that the user running it has access to.")
@@ -110,21 +116,17 @@ func main() {
 	contextServe := mkServer(contextDir, true)
 	rawServe := mkServer(contextDir, false)
 	globalServe := mkServer("", true)
-	docRedirect := func(ctx *web.Context) {
-		ctx.Redirect(302, "/doc/")
-	}
+	docRedirect := mkRedirect("/doc/")
 	web.Get("", docRedirect)
 	web.Get("/", docRedirect)
 	web.Get("/doc", docRedirect)
 	web.Get("/doc/(.*)", contextServe)
 	web.Get("/raw/(.*)", rawServe)
-	web.Get("/raw", func(ctx *web.Context) {
-		ctx.Redirect(302, "/doc/")
-	})
+	web.Get("/raw", mkRedirect("/raw/"))
 
 	if *global {
 		web.Get("/doc-g/(.*)", globalServe)
-		web.Get("/doc-g", globalServe)
+		web.Get("/doc-g", mkRedirect("/doc-g/"))
 	}
 	if *remote {
 		web.Run("0.0.0.0:" + port)
