@@ -121,13 +121,15 @@ func main() {
 	web.Get("/", docRedirect)
 	web.Get("/doc", docRedirect)
 	web.Get("/doc/(.*)", contextServe)
-	web.Get("/raw/(.*)", rawServe)
 	web.Get("/raw", mkRedirect("/raw/"))
+	web.Get("/raw/(.*)", rawServe)
 
 	if *global {
 		web.Get("/doc-g/(.*)", globalServe)
 		web.Get("/doc-g", mkRedirect("/doc-g/"))
 	}
+
+	// start server
 	if *remote {
 		web.Run("0.0.0.0:" + port)
 	} else {
